@@ -1,0 +1,27 @@
+<h1>Listing paintings</h1>
+
+<div id="paintings">
+  <% unless @paintings.empty? %>
+    <%= render partial: 'list' %>
+  <% end %>
+</div>
+
+<div class="clear"></div>
+
+<%= link_to 'New Painting', new_painting_path %>
+
+<br/>
+<%= form_for Painting.new do |f| %>
+  <%= f.label :image, "Upload paintings:" %>
+  <%= f.file_field :image, multiple: true, name: "painting[image]" %>
+<% end %>
+
+
+
+<script id="template-upload" type="text/x-tmpl">
+<div class="upload">
+  {%=o.name%}
+  <div class="progress"><div class="bar" style="width: 0%;"></div></div>
+</div>
+</script>
+

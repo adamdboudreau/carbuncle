@@ -14,6 +14,8 @@ gem 'uglifier', '>= 1.3.0'
 
 # Use CoffeeScript for .js.coffee assets and views
 gem 'coffee-rails', '~> 4.0.0'
+gem 'sprockets-rails', :require => 'sprockets/railtie'
+gem 'jquery-fileupload-rails'
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
@@ -32,6 +34,12 @@ group :doc do
   gem 'sdoc', require: false
 end
 
+group :test do
+  gem 'rspec'
+  gem 'rspec-rails'
+  gem 'cucumber'
+  gem 'cucumber-rails'
+end
 # Use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 
@@ -43,3 +51,15 @@ end
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
+
+gem 'squeel'
+gem 'devise'
+# gem 'activeadmin'
+# gem "meta_search", '>= 1.1.0.pre'
+gem 'haml'
+gem 'omniauth-twitter'
+gem 'omniauth-facebook'
+gem 'figaro'
+
+gem 'carrierwave'
+gem 'will_paginate'
