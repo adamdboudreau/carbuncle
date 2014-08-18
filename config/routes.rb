@@ -1,4 +1,9 @@
 Carbuncle::Application.routes.draw do
+  resources :products
+  get 'fader' => 'paintings#fader'
+  get 'p_test' => 'products#p_test'
+  get 'knockout_test' => 'products#knockout_test'
+
   resources :paintings
 
   devise_for :users, path_names: {sign_in: "login", sign_out: "logout"}, controllers: {omniauth_callbacks: "omniauth_callbacks"}

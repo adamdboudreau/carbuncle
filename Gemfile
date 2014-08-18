@@ -37,8 +37,10 @@ end
 group :test do
   gem 'rspec'
   gem 'rspec-rails'
+  gem 'shoulda-matchers'
   gem 'cucumber'
   gem 'cucumber-rails'
+  gem 'factory_girl'
 end
 # Use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
@@ -63,3 +65,4 @@ gem 'figaro'
 
 gem 'carrierwave'
 gem 'will_paginate'
+gem 'newrelic_rpm'

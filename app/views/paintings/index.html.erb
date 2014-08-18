@@ -2,6 +2,11 @@
 
 <div id="paintings">
   <% unless @paintings.empty? %>
+    <!-- 
+    <% Painting.all.each do |p| %>
+      <%= image_tag p.image, style: 'width: 200px; border: 0px; margin: 0px; padding: 0px;' %>
+    <% end %>
+    -->
     <%= render partial: 'list' %>
   <% end %>
 </div>

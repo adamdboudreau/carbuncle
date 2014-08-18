@@ -1,0 +1,186 @@
+%hi Hello
+
+#outy
+  = image_tag @links.first, width: '720px', height: '1080px', id: 'inny'
+
+
+%br/
+
+:javascript
+  function fadeInImage(div, img) {
+    $(div).attr('src', img);
+    $(div).fadeIn(1000);
+  }
+  //$(function(){
+  //$('#outy').data('test', 'abc');
+  //console.log($('#outy').data('test'));
+  //$('#outy').data('test', 'def');
+  //console.log($('#outy').data('test'));
+  
+  $('#outy').data('links', #{@links.inspect});
+  $('#outy').data('index', 0);
+  setInterval('fadeImages()', 5000);
+
+  //var f = new imageFader();
+  //f.setImageList(#{@links.inspect});
+  //console.log(f);
+  //console.log(f.imageList);
+  //f.start('outy', 'inny');
+  //});
+
+  console.log('stuff');
+
+
+  function fadeImages(){
+    $('#outy').data('test', 'def');
+
+    var f = new imageFader();
+    f.setImageList($('#outy').data('links'));
+    f.setIndex($('#outy').data('index'));
+
+    f.start('#inny', '#outy');
+    //$('#outy').data('index', f.index);
+    //console.log('index after incrementing: ' + f.index);
+  }
+  
+  function imageFader(){
+    this.imageList = new Array();
+    this.dur = 5000; // fade duration
+    this.index = 0;  // current image shown
+    this.fDiv = 'test';
+    this.bDiv = 'test2';
+    this.w = '720px';
+    this.h = '1080px';
+
+
+    this.fadeNextImage = function(obj) {
+      this.nextIndex();
+      $('#outy').data('index', this.index);
+      //console.log(this.dur);
+      //console.log('f: ' + this.fDiv + 'b: ' + this.bDiv);
+      //console.log(this.w);
+      //console.log('index: ' + this.index);
+      //console.log('index: ' + this.imageList[this.index]);
+      var tmp = 0;
+
+      console.log('inny src1: ' + $('#inny').attr('src')); // pic1
+      $('#inny').attr('src', this.imageList[this.index]);
+      console.log('inny src2: ' + $('#inny').attr('src')); // pic2
+
+      if (this.index < (this.imageList.length - 1)) {
+        tmp = this.index + 1;
+      } else {
+        tmp = this.index;
+      }
+
+      //console.log('index2: ' + this.index);
+      //console.log('index2: ' + this.imageList[this.index]);
+      console.log('inny outy1: ' + $('#outy').css('background')); //none
+      $('#outy').css("background-image","url('" + this.imageList[this.index] + "')");
+      console.log('inny outy2: ' + $('#outy').css('background')); //pic2
+
+      //css("background-image","url('" + this.imageList[this.index] + "')");
+      
+      //var tmp = this.index; // First
+
+      //console.log('next index: ' + this.index);
+
+      //$('#' + this.bDiv).css("background-image","url('uploads/painting/image/234/kagney-raft-pic001.jpg')");
+
+      // $(this.bDiv).attr("src", this.imageList[this.index]);
+
+      // Fade front div to back div's image
+      //$(this.fDiv).fadeOut(1000, fadeInImage('#inner', this.imageList[this.index]));
+      //console.log('inny src3: ' + $('#inny').attr('src'));  // pic2
+      //$('#inny').fadeOut(1000, this.changeNextImage(this.index));
+
+      //, this.changeNextImage());
+      //$(this.fDiv).attr('src', this.imageList[$('#outy').data('index')]);
+      //setTimeout(this.changeNextImage(), 1000);
+      //setTimeout(this.changeNextImageOut(tmp), 2000);
+      //$(this.bDiv).fadeIn(4000);
+    }
+
+    this.changeNextImage = function(nextInd) {
+      //console.log('reset front to: ' + this.imageList[this.index]);
+      //console.log('front src1: ' + $(this.fDiv).attr('src'));
+      //this.nextIndex();
+      //console.log($(this.fDiv).attr('src'));
+      
+      //$(this.fDiv).attr('src', this.imageList[nextInd]);
+      //$(this.fDiv).attr('src', this.imageList[$('#outy').data('index')]);
+      //console.log($(this.fDiv).attr('src'));
+      //console.log('front src2: ' + $(this.fDiv).attr('src'));
+      
+      //$(this.fDiv).css("background-image","url('" + this.imageList[this.index] + "')");
+      //var tmp = this.index; // First
+      //this.nextIndex();
+      //console.log('force back to: ' + this.imageList[this.index - 1]);
+      //$(this.bDiv).css("background-image","url('" + this.imageList[this.index] + "')");
+
+      // Fade front div to back div's image
+      //$(this.fDiv).fadeIn(0);
+      //fadeInImage(this.fDiv);
+      console.log('inny src4: ' + $('#inny').attr('src')); //pic2
+      $('#inny').attr('src', this.imageList[nextInd]);
+      console.log('inny src5: ' + $('#inny').attr('src')); //pic3
+      //$('#inny').fadeIn(1000);
+      //$('#inny').show();
+      $('#inny').css('display', 'block');
+      //$(this.bDiv).fadeOut(4000);
+    }
+    //this.changeNextImageOut = function(tmp) {
+    //$('#inny').attr('src', this.imageList[tmp]);
+    //$('#inny').fadeOut(1000);
+    //}
+
+    this.start = function(frontDiv, backDiv){
+      if ($(frontDiv) && $(backDiv)) {
+        if (this.imageList.length > 1) {
+          this.setDivs(frontDiv, backDiv);
+          $(this.bDiv).css("width", this.w);
+          $(this.bDiv).css("height", this.h);
+          $(this.bDiv).css("background-size", this.w + ' ' + this.h);
+          $(this.fDiv).css("width", this.w);
+          $(this.fDiv).css("height", this.h);
+          $(this.fDiv).css("background-size", this.w + ' ' + this.h);
+
+          //setInterval('this.fadeNextImage(this)', 4000);
+          //setInterval('logStuff(this)', 4000);
+
+          //setTimeout(this.fadeNextImage(), 4000);
+          //setTimeout(func, 4000);
+          //function func() {
+          //    alert('Do stuff here');
+          //}
+          this.fadeNextImage();
+        } else {
+          alert('no images in the list');
+        }
+      } else {
+        alert('divs not found');
+      }
+
+    }
+    this.nextIndex = function(){
+      if (this.index < (this.imageList.length - 1)) {
+        this.index ++;
+      } else {
+        this.index = 0;
+      }
+    }
+    this.setIndex = function(num) {
+      this.index = num;
+    }
+
+    this.pushImage = function(newImage) {
+      this.imageList.push(newImage);
+    }
+    this.setImageList = function(list) {
+      this.imageList = list;
+    }
+    this.setDivs = function(f, b) {
+      this.fDiv = f;
+      this.bDiv = b;
+    }
+  }

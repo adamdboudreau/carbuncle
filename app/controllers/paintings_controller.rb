@@ -2,30 +2,31 @@ class PaintingsController < ApplicationController
   before_action :set_painting, only: [:show, :edit, :update, :destroy]
 
   before_action :setup_sorting_variables, only: [:index]
-  # GET /paintings
-  # GET /paintings.json
+
+  def fader
+    @p = Painting.ordered_by(:created, :asc).where(id: [358, 359, 360])
+    @links = []
+    @p.each do |p|
+      @links << p.image.to_s
+    end
+  end
+  
   def index
     sort_key = [:image, :title, :caption, :ordinal, :created, :updated][@sort]
     direction = (@asc == 1) ? :asc : :desc
     @paintings = Painting.ordered_by(sort_key, direction).page(@page).per_page(10)
   end
 
-  # GET /paintings/1
-  # GET /paintings/1.json
   def show
   end
 
-  # GET /paintings/new
   def new
     @painting = Painting.new
   end
 
-  # GET /paintings/1/edit
   def edit
   end
 
-  # POST /paintings
-  # POST /paintings.json
   def create
     @painting = Painting.new(painting_params)
 
@@ -40,8 +41,6 @@ class PaintingsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /paintings/1
-  # PATCH/PUT /paintings/1.json
   def update
     respond_to do |format|
       if @painting.update(painting_params)
@@ -54,8 +53,6 @@ class PaintingsController < ApplicationController
     end
   end
 
-  # DELETE /paintings/1
-  # DELETE /paintings/1.json
   def destroy
     @painting.destroy
     respond_to do |format|

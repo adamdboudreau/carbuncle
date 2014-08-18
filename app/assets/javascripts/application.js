@@ -19,3 +19,4 @@
 
 //= require jquery-fileupload/vendor/tmpl
 
+//= require bootstrap

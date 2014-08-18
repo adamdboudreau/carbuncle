@@ -1,0 +1,77 @@
+
+<%= javascript_include_tag "knockout-3.0.0.js" %>
+
+<h3> Details </h3>
+
+<p>First Name: <span data-bind="text: firstName"></span></p>
+<p>First Name: <input data-bind="value: firstName"/></p>
+
+
+<p>Last Name: <span data-bind="text: lastName"></span></p>
+<p>Last Name: <input data-bind="value: lastName"/></p>
+
+<!--
+<h2> Friends</h2>
+<div data-bind="template: 'friendsTemplate"></div>
+
+<script id="friendsTemplate" type="text/html">
+  <ul>
+    {{each(index, friend) friends}}
+      <li>${ friend.Fullname } - ${ new Date }</li>
+    {{/each}}
+  </ul>
+</script>
+-->
+<!-- -->
+<h2> Friends  (<span data-bind="text: friends().length"></span>)</h2>
+<ul data-bind="template: {name:'friendsTemplate', foreach:friends}"></ul>
+
+<script id="friendsTemplate" type="text/html">
+  <li>
+    <input data-bind="value: name" />
+    <button data-bind="click: remove">Remove</button>
+
+    <label><input type="checkbox" data-bind="checked: isOnTwitter" /> Is on Twitter</label>
+    <input data-bind="value: twitterName, visible: isOnTwitter" />
+  </li>
+</script>
+<!-- -->
+<button data-bind="click: addFriend, enable: friends().length < 5"> Add Friend </button>
+<button data-bind="click: save"> Save </button>
+
+<script type="text/javascript">
+  function friend(name) {
+    return {
+      name: ko.observable(name),
+      isOnTwitter: ko.observable(false),
+      twitterName: ko.observable(),
+      remove: function() {
+        viewModel.friends.remove(this);
+      }
+    };
+  }
+
+  var viewModel = {
+    firstName: ko.observable("Bert"),
+    lastName: ko.observable("Smith"),
+    friends: ko.observableArray([new friend("Steve"), new friend("Annie")]),
+    addFriend: function() {
+      this.friends.push(new friend("another"));
+    },
+    save: function () {
+      $.ajax({
+        url: "url..",
+        type: "post",
+        data: ko.toJSON(this),
+        contentType: "application/json",
+        success: function (result) { alert(result.message) }
+      });
+    }
+  }
+  viewModel.fullName = ko.dependentObservable(function () {
+    return this.firstName() + " " + this.lastName();
+  }, viewModel);
+
+  ko.applyBindings(viewModel);
+  
+</script>
