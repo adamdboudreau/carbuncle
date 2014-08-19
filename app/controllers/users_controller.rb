@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   respond_to :html, :js, :json
 
   before_action :setup_sorting_variables, only: [:index]
-  before_action :find_user, except: [:index, :new]
+  before_action :find_user, except: [:index]
 
   def index
     sort_key = [:email, :created, :updated][@sort]
