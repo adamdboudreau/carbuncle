@@ -4,7 +4,7 @@ class PaintingsController < ApplicationController
   before_action :setup_sorting_variables, only: [:index]
 
   def fader
-    @p = Painting.ordered_by(:created, :asc).where(id: [358, 359, 360])
+    @p = Painting.ordered_by(:created, :asc) #.where(id: [358, 359, 360])
     @links = []
     @p.each do |p|
       @links << p.image.to_s
