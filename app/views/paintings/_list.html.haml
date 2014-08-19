@@ -1,0 +1,14 @@
+= will_paginate @paintings
+
+= hidden_field_tag :sort, params[:sort]
+= hidden_field_tag :page, params[:page]
+
+%table.table.table-striped
+  %tr
+    - ["Image", "Title", "Caption", "Ordinal", "Created", "Modified"].each_with_index do |title, index|
+      %th= sortable index, title
+    %th
+    %th
+    %th
+
+  = render partial: 'paintings_table'

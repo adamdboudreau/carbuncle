@@ -1,0 +1,141 @@
+%hi Hello
+
+#outy
+  #inny
+
+%br/
+
+:javascript
+  //$(function(){
+  //$('#outy').data('test', 'abc');
+  //console.log($('#outy').data('test'));
+  //$('#outy').data('test', 'def');
+  //console.log($('#outy').data('test'));
+  
+  $('#outy').data('links', #{@links.inspect});
+  $('#outy').data('index', 0);
+  setInterval('fadeImages()', 4000);
+
+  //var f = new imageFader();
+  //f.setImageList(#{@links.inspect});
+  //console.log(f);
+  //console.log(f.imageList);
+  //f.start('outy', 'inny');
+  //});
+
+  console.log('stuff');
+
+
+  function fadeImages(){
+    $('#outy').data('test', 'def');
+
+    var f = new imageFader();
+    f.setImageList($('#outy').data('links'));
+    f.setIndex($('#outy').data('index'));
+
+    f.start('#inny', '#outy');
+    $('#outy').data('index', f.index);
+    console.log('index after incrementing: ' + f.index);
+  }
+  
+  function imageFader(){
+    this.imageList = new Array();
+    this.dur = 5000; // fade duration
+    this.index = 0;  // current image shown
+    this.fDiv = 'test';
+    this.bDiv = 'test2';
+    this.w = '1280px';
+    this.h = '1440px';
+
+
+    this.fadeNextImage = function(obj) {
+      //console.log(this.dur);
+      //console.log('f: ' + this.fDiv + 'b: ' + this.bDiv);
+      //console.log(this.w);
+      //console.log('index: ' + this.index);
+
+      console.log('from: ' + this.imageList[this.index]);
+      console.log($(this.fDiv).css('background-image'));
+      $(this.fDiv).css("background-image","url('" + this.imageList[this.index] + "')");
+      
+      var tmp = this.index; // First
+      this.nextIndex();     // Next index
+
+      //console.log('next index: ' + this.index);
+      console.log('to: ' + this.imageList[this.index]);
+      console.log($(this.bDiv).css('background-image'));
+      $(this.bDiv).css("background-image","url('" + this.imageList[this.index] + "')");
+      //$('#' + this.bDiv).css("background-image","url('uploads/painting/image/234/kagney-raft-pic001.jpg')");
+
+      // $(this.bDiv).attr("src", this.imageList[this.index]);
+
+      // Fade front div to back div's image
+      // $(this.fDiv).fadeOut(4000, this.changeNextImage(tmp));
+
+      $(this.fDiv).fadeOut(4000, this.changeNextImage());
+    }
+
+    this.changeNextImage = function() {
+      console.log('reset front to: ' + this.imageList[this.index]);
+      $(this.fDiv).css("background-image","url('" + this.imageList[this.index] + "')");
+      //var tmp = this.index; // First
+      //this.nextIndex();     // Next index
+      //console.log('force back to: ' + this.imageList[this.index - 1]);
+      //$(this.bDiv).css("background-image","url('" + this.imageList[this.index - 1] + "')");
+
+      // Fade front div to back div's image
+      //$(this.fDiv).fadeIn(4000, this.fadeNextImage());
+      //$('#' + this.fDiv).fadeIn(4000, this.fadeNextImage());
+      $(this.fDiv).fadeIn(100);
+    }
+
+    this.start = function(frontDiv, backDiv){
+      if ($(frontDiv) && $(backDiv)) {
+        if (this.imageList.length > 1) {
+          this.setDivs(frontDiv, backDiv);
+          $(this.bDiv).css("width", '1280px');
+          $(this.bDiv).css("height", '1440px');
+          $(this.bDiv).css("background-size", '1280px 1440px');
+          $(this.fDiv).css("width", '1280px');
+          $(this.fDiv).css("height", '1440px');
+          $(this.fDiv).css("background-size", '1280px 1440px');
+
+          //setInterval('this.fadeNextImage(this)', 4000);
+          //setInterval('logStuff(this)', 4000);
+
+          //setTimeout(this.fadeNextImage(), 4000);
+          //setTimeout(func, 4000);
+          //function func() {
+          //    alert('Do stuff here');
+          //}
+          this.fadeNextImage();
+        } else {
+          alert('no images in the list');
+        }
+      } else {
+        alert('divs not found');
+      }
+
+    }
+    this.nextIndex = function(){
+      if (this.index < (this.imageList.length - 1)) {
+        this.index ++;
+      } else {
+        this.index = 0;
+      }
+    }
+    this.setIndex = function(num) {
+      this.index = num;
+    }
+
+    this.pushImage = function(newImage) {
+      this.imageList.push(newImage);
+    }
+    this.setImageList = function(list) {
+      this.imageList = list;
+    }
+    this.setDivs = function(f, b) {
+      this.fDiv = f;
+      this.bDiv = b;
+    }
+  }

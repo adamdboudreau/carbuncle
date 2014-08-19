@@ -1,0 +1,24 @@
+
+#banners
+  - @p.each_with_index do |p, i|
+    %div{ style: 'position: absolute;' }
+      = image_tag p.image, style: 'width: 1080px; border: 0px; margin: 0px; padding: 0px;'
+
+%br/
+
+
+
+= javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"
+
+= javascript_include_tag "http://creativecouple.github.com/jquery-timing/jquery-timing.min.js"
+
+
+:javascript
+  $.fn.random = function() {
+    return this.eq(Math.floor(Math.random() * this.length))
+  };
+
+  $(function() {
+    $('#banners>*').hide().repeat(5000,true).fadeOut(1000).siblings().random().fadeIn(1000).until($);
+  });
+

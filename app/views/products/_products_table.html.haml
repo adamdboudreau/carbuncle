@@ -1,0 +1,11 @@
+- @products.each do |product|
+  - present product do |p|
+    %tr
+      %td= p.name
+      %td= p.description
+      %td= p.cost
+      %td= p.created_at.strftime('%D')
+      %td= p.updated_at.strftime('%D')
+      %td= link_to "Show", p.product
+      %td= link_to 'Edit', edit_product_path(p.product)
+      %td= link_to 'Destroy', p.product, method: :delete, data: { confirm: "Are you sure?" }

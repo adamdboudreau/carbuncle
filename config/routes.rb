@@ -1,9 +1,19 @@
 Carbuncle::Application.routes.draw do
+  resources :products
+  get 'fader' => 'paintings#fader'
+  get 'p_test' => 'products#p_test'
+  get 'knockout_test' => 'products#knockout_test'
+
+  resources :paintings
+  resources :users
+
+  devise_for :users, path_names: {sign_in: "login", sign_out: "logout"}, controllers: {omniauth_callbacks: "omniauth_callbacks"}
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  # root 'welcome#index'
+  root 'dashboard#index'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

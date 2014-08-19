@@ -1,0 +1,42 @@
+%h1= (@user.new_record?) ? 'Create user' : 'Edit user'
+
+- if @user.errors.any?
+  #error_explanation
+    %h2= pluralize(@user.errors.count, t(:error)).html_safe + t(:_prohibited_this_product_from_being_saved)
+    %ul
+      - @user.errors.full_messages.each do |msg|
+        %li= msg
+
+%div
+  = form_for @user, as: :user, url: '/users' do |f|
+    .labels
+      = f.label :email
+    = f.text_field :email
+    
+    / .labels
+    /   = f.label :first_name
+    / = f.text_field :first_name
+
+    / .labels
+    /   = f.label :last_name
+    / = f.text_field :last_name
+
+    .labels
+      = f.label :password
+    = f.password_field :password
+
+    .labels
+      = f.label :password_confirmation
+    = f.password_field :password_confirmation
+
+    %br/
+    .submit_field
+      = f.submit
+
+:javascript
+  $(function() {
+    console.log( "ready!" );
+    var btn = $('input[type=submit]');
+    btn.addClass('btn btn-default btn-lg');
+    }
+  });

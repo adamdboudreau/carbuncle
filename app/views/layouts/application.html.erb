@@ -8,7 +8,35 @@
 </head>
 <body>
 
-<%= yield %>
+<div id="container">
+  <div class="row">
+
+    <div class="col-md-8">
+      <%= link_to "Dashboard", root_path, {class: 'btn btn-primary'} %>
+      <%= link_to "Users", users_path, {class: 'btn btn-primary'} %>
+      <%= link_to "Images", paintings_path, {class: 'btn btn-primary'} %>
+      <%= link_to "Image Fader", fader_path, {class: 'btn btn-primary'} %>
+      <%= link_to "Products", products_path, {class: 'btn btn-primary'} %>
+      <%= link_to "P test", p_test_path, {class: 'btn btn-primary'} %>
+      <%= link_to "Knockout test", knockout_test_path, {class: 'btn btn-primary'} %>
+
+    </div>
+    <div class="col-md-4">
+      <% if user_signed_in? %>
+        Logged in as <strong><%= current_user.email %></strong>.
+        <%= link_to 'Edit profile', edit_user_registration_path %> |
+        <%= link_to "Logout", destroy_user_session_path, method: :delete %>
+      <% else %>
+        <%= link_to "Sign up", new_user_registration_path %> |
+        <%= link_to "Login", new_user_session_path %> |
+      <%= link_to "Sign in with Twitter", user_omniauth_authorize_path(:twitter) %> |
+      <%= link_to "Sign in with facebook", user_omniauth_authorize_path(:facebook) %>
+      <% end %>
+    </div>
+  </div>
+  
+  <%= yield %>
+</div>
 
 </body>
 </html>

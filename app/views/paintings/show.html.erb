@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Image:</strong>
+  <%= image_tag @painting.image, width: '1280px' %>
+</p>
+
+<p>
+  <strong>Title:</strong>
+  <%= @painting.title %>
+</p>
+
+<p>
+  <strong>Caption:</strong>
+  <%= @painting.caption %>
+</p>
+
+<p>
+  <strong>Ordinal:</strong>
+  <%= @painting.ordinal %>
+</p>
+
+<%= link_to 'Edit', edit_painting_path(@painting) %> |
+<%= link_to 'Back', paintings_path %>
