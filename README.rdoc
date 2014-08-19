@@ -2,3 +2,19 @@
 
 This project is a test application for me to showcase Ruby on Rails skills I have used in the past,
 and try out new things
+
+Gems I have been using include:
+devise
+squeel
+haml
+omniauth-twitter
+omniauth-facebook
+figaro
+carrierwave
+will_paginate
+
+JavaScript libraries I am using include:
+JQuery
+Knockout
+
+I am using bootstrap to help with layout design and buttons
