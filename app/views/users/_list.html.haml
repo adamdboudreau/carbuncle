@@ -1,0 +1,14 @@
+= will_paginate @users
+
+= hidden_field_tag :sort, params[:sort]
+= hidden_field_tag :page, params[:page]
+
+%table.table.table-striped
+  %tr
+    - ["Email", "Created", "Modified"].each_with_index do |title, index|
+      %th= sortable index, title
+    %th
+    %th
+    %th
+
+  = render partial: 'users_table'

@@ -23,4 +23,21 @@ class User < ActiveRecord::Base
   def password_required?
     super && provider.blank?
   end
+
+  def self.ordered_by(sort, asc)
+    case sort
+    when :email
+      order{ email.send(asc) }
+    when :created
+      order{ created_at.send(asc) }
+    when :updated
+      order{ updated_at.send(asc) }
+    else
+      all
+    end
+  end
+
+  scope :similar_emails, -> (partial) { partial.blank? ? all : where{ email =~ "%#{partial}%" } }
+
+  
 end

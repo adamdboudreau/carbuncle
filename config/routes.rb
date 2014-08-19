@@ -5,6 +5,7 @@ Carbuncle::Application.routes.draw do
   get 'knockout_test' => 'products#knockout_test'
 
   resources :paintings
+  resources :users
 
   devise_for :users, path_names: {sign_in: "login", sign_out: "logout"}, controllers: {omniauth_callbacks: "omniauth_callbacks"}
 
