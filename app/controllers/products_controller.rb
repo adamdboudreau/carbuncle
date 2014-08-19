@@ -1,78 +1,117 @@
 class ProductsController < ApplicationController
-  before_action :set_product, only: [:show, :edit, :update, :destroy]
+  # before_action :set_product, only: [:show, :edit, :update, :destroy]
+
+  before_action :setup_sorting_variables, only: [:index]
+  before_action :find_product, except: [:index, :p_test]
 
   def p_test
-
   end
   
-  # GET /products
-  # GET /products.json
   def index
-    @products = Product.all
+    sort_key = [:name, :descritpion, :cost, :created, :updated][@sort]
+    direction = (@asc == 1) ? :asc : :desc
+    
+    @products = Product.similar_names(params[:search]).
+      similar_descriptions(params[:search]).
+      ordered_by(sort_key, direction).page(@page).per_page(10)
   end
 
-  # GET /products/1
-  # GET /products/1.json
   def show
   end
 
-  # GET /products/new
   def new
-    @product = Product.new
+    # @product = Product.new
+    setup_form
   end
 
-  # GET /products/1/edit
   def edit
+    setup_form
   end
 
-  # POST /products
-  # POST /products.json
   def create
-    @product = Product.new(product_params)
+    save_form
+    # @product = Product.new(product_params)
 
-    respond_to do |format|
-      if @product.save
-        format.html { redirect_to @product, notice: 'Product was successfully created.' }
-        format.json { render action: 'show', status: :created, location: @product }
-      else
-        format.html { render action: 'new' }
-        format.json { render json: @product.errors, status: :unprocessable_entity }
-      end
-    end
+    # respond_to do |format|
+    #   if @product.save
+    #     format.html { redirect_to @product, notice: 'Product was successfully created.' }
+    #     format.json { render action: 'show', status: :created, location: @product }
+    #   else
+    #     format.html { render action: 'new' }
+    #     format.json { render json: @product.errors, status: :unprocessable_entity }
+    #   end
+    # end
   end
 
-  # PATCH/PUT /products/1
-  # PATCH/PUT /products/1.json
   def update
-    respond_to do |format|
-      if @product.update(product_params)
-        format.html { redirect_to @product, notice: 'Product was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: 'edit' }
-        format.json { render json: @product.errors, status: :unprocessable_entity }
-      end
-    end
+    save_form
+    # respond_to do |format|
+    #   if @product.update(product_params)
+    #     format.html { redirect_to @product, notice: 'Product was successfully updated.' }
+    #     format.json { head :no_content }
+    #   else
+    #     format.html { render action: 'edit' }
+    #     format.json { render json: @product.errors, status: :unprocessable_entity }
+    #   end
+    # end
   end
 
   # DELETE /products/1
   # DELETE /products/1.json
   def destroy
-    @product.destroy
-    respond_to do |format|
-      format.html { redirect_to products_url }
-      format.json { head :no_content }
+    if @product.nil?
+      flash[:error] = "Can't find product" 
+    elsif @product.new_record?
+      flash[:error] = "Can't destroy new product" 
+    else
+      flash[:notice] = "You destroyed #{@product.name}"
+      @product.destroy
     end
+
+    redirect_to products_path
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
-    def set_product
-      @product = Product.find(params[:id])
+    # def set_product
+    #   @product = Product.find(params[:id])
+    # end
+
+    def find_product
+      @product = if params[:id].blank?
+        Product.new
+      else
+        Product.where(id: params[:id]).first
+      end
     end
 
+
+  def setup_form
+    render :form
+  end
+
+  def save_form
+    @product.attributes = product_params
+    if @product.save
+      flash[:notice] = "Successfully saved #{@product.name}"
+      redirect_to products_url
+    else
+      setup_form
+    end
+  end
+  
     # Never trust parameters from the scary internet, only allow the white list through.
     def product_params
       params.require(:product).permit(:name, :description, :cost)
     end
+
+  def view_content
+    render params[:action]
+  end
+
+  def setup_sorting_variables
+    @sort = params[:sort].blank? ? 0 : params[:sort].to_i
+    @asc = params[:asc].blank? ? 0 : params[:asc].to_i
+    @page = params[:page].blank? ? 1 : params[:page].to_i
+  end
 end

@@ -1,0 +1,30 @@
+%h1= (@product.new_record?) ? 'Create product' : 'Edit product'
+
+- if @product.errors.any?
+  #error_explanation
+    %h2= pluralize(@product.errors.count, t(:error)).html_safe + t(:_prohibited_this_product_from_being_saved)
+    %ul
+      - @product.errors.full_messages.each do |msg|
+        %li= msg
+
+.elem.generic_form
+  = form_for @product, as: :product, url: '/products' do |f|
+    .elem
+      .labels
+        = f.label :name
+      = f.text_field :name
+      .labels
+        = f.label :description
+      = f.text_field :description
+      .labels
+        = f.label :cost
+      = f.text_field :cost
+    
+    .btn-group.submit_field
+      - if @product.new_record?
+        = f.submit 'Create', class: 'btn btn-success'
+      - else
+        = f.submit 'Update', class: 'btn btn-success'
+        = link_to 'Show', @product, { class: 'btn btn-default' }
+
+      = link_to 'Back', products_path, { class: 'btn btn-default' }

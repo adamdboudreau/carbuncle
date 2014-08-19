@@ -1,0 +1,43 @@
+%h1 Listing Products
+
+%br/
+
+.elem
+	= form_tag products_path, method: :get, id: "product_search" do
+		= text_field_tag :search, params[:search], placeholder: "Search products"
+		= submit_tag "Search", name: nil
+
+- unless @products.empty?
+	.elem{ id: 'products_table' }
+		= render partial: 'list'
+- else
+	.elem
+		- if params[:search].blank?
+			No products exist
+		- else
+			No products match your search criteria
+
+
+%br/
+%br/
+
+.white_link.small_margin
+	= link_to "New Product", new_product_path, class: 'btn btn-default'
+
+
+:javascript
+	// Add click event to each of the headers of the products table, and pagination
+	$(function () {
+		$('#products_table th a, #products_table .pagination a').on('click', &crarr; 
+			function () {
+				$.getScript(this.href);
+				return false;
+			}
+		);
+		
+		// Search form.
+		$('#product_search').submit(function () {
+			$.get(this.action, $(this).serialize(), null, 'script');
+			return false;
+		});
+	});
