@@ -1,0 +1,43 @@
+%h1 Listing Users
+
+%br/
+
+.elem
+	= form_tag administration_manage_users_path, method: :get, id: "user_search" do
+		= text_field_tag :search, params[:search], placeholder: "Search by email"
+		= submit_tag "Search", name: nil
+
+- unless @users.empty?
+	.elem{ id: 'users_table' }
+		= render partial: 'list'
+- else
+	.elem
+		- if params[:search].blank?
+			No users exist
+		- else
+			No users match your search criteria
+
+
+%br/
+%br/
+
+.white_link.small_margin
+	= link_to "New User", new_administration_manage_user_path, class: 'btn btn-default'
+
+
+:javascript
+	// Add click event to each of the headers of the products table, and pagination
+	$(function () {
+		$('#users_table th a, #users_table .pagination a').on('click', &crarr; 
+			function () {
+				$.getScript(this.href);
+				return false;
+			}
+		);
+		
+		// Search form.
+		$('#user_search').submit(function () {
+			$.get(this.action, $(this).serialize(), null, 'script');
+			return false;
+		});
+	});

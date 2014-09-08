@@ -1,4 +1,4 @@
-class UsersController < ApplicationController
+class Administration::UsersController < ApplicationController
   respond_to :html, :js, :json
 
   before_action :setup_sorting_variables, only: [:index]
@@ -33,16 +33,16 @@ class UsersController < ApplicationController
   end
 
   def destroy
-  	if @user.nil?
-  		flash[:error] = "Can't find user" 
-  	elsif @user.new_record?
-  		flash[:error] = "Can't destroy new user" 
-  	else
-  		flash[:notice] = "You destroyed #{@user.email}"
-  		@user.destroy
-  	end
+    if @user.nil?
+      flash[:error] = "Can't find user" 
+    elsif @user.new_record?
+      flash[:error] = "Can't destroy new user" 
+    else
+      flash[:notice] = "You destroyed #{@user.email}"
+      @user.destroy
+    end
 
-  	redirect_to users_path
+    redirect_to users_path
   end
 
 private

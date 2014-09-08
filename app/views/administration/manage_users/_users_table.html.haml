@@ -1,0 +1,9 @@
+- @users.each do |user|
+  - present user do |u|
+    %tr
+      %td= u.email
+      %td= u.created_at.strftime('%D')
+      %td= u.updated_at.strftime('%D')
+      %td= link_to "Show", administration_manage_user_path(u.user)
+      %td= link_to 'Edit', edit_administration_manage_user_path(u.user)
+      %td= link_to 'Destroy', administration_manage_user_path(u.user), method: :delete, data: { confirm: "Are you sure?" }
