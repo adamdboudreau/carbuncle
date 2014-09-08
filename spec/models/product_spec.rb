@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe Product do
+  let(:product) { FactoryGirl.create(:product) }
+
   describe "#valid?" do
     it "valid factory" do
       FactoryGirl.build(:product).valid?.should be_true
@@ -8,7 +10,6 @@ describe Product do
   end
 
   describe ".similar_names" do
-    let(:product) { FactoryGirl.create(:product) }
     it "should return all products when given nil" do
       Product.similar_names(nil).should == [product]
     end
@@ -19,6 +20,20 @@ describe Product do
 
     it "should not return products that don't match the partial name given" do
       Product.similar_names("Software as a Service").should be_empty
+    end
+  end
+
+  describe ".similar_descriptions" do
+    it "should return all products when given nil" do
+      Product.similar_descriptions(nil).should == [product]
+    end
+
+    it "should return products with the partial name given" do
+      Product.similar_descriptions("serv").should == [product]
+    end
+
+    it "should not return products that don't match the partial name given" do
+      Product.similar_descriptions("SaaS").should be_empty
     end
   end
 
