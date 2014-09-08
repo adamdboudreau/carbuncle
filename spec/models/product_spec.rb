@@ -81,18 +81,18 @@ describe Product do
     end
 
     let(:products) do
-      u1 = u2 = nil
+      p1 = p2 = nil
 
       Timecop.freeze(2008, 7, 1, 12, 0, 0) do
-        u1 = FactoryGirl.create(:product)
+        p1 = FactoryGirl.create(:product)
       end
 
       Timecop.freeze(2008, 7, 1, 12, 30, 0) do
-        u2 = FactoryGirl.create(:product)
+        p2 = FactoryGirl.create(:product)
       end
-      u3 = FactoryGirl.create(:product)
+      p3 = FactoryGirl.create(:product)
       
-      [u1, u2, u3]
+      [p1, p2, p3]
     end
 
     context "created" do
