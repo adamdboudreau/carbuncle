@@ -38,12 +38,16 @@ describe User do
       [u1, u2, u3]
     end
 
+    let(:alpha_users) do
+      [FactoryGirl.create(:user, email: 'asdf@test.com'), FactoryGirl.create(:user, email: 'fdsa@test.com'), FactoryGirl.create(:user, email: 'fdsa@zest.com')]
+    end
+
     context "email" do
       it "should sort by user emails" do
-        User.ordered_by(:email, :asc).should == users
+        User.ordered_by(:email, :asc).should == alpha_users
       end
       # it "should sort by user emails desc" do
-      #   User.ordered_by(:email, :desc).should == users.reverse
+      #   User.ordered_by(:email, :desc).should == alpha_users.reverse
       # end
     end
 

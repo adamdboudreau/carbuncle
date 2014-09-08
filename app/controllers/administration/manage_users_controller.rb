@@ -1,6 +1,7 @@
 class Administration::ManageUsersController < ApplicationController
   respond_to :html, :js, :json
 
+  before_action :authenticate_user!
   before_action :setup_sorting_variables, only: [:index]
   before_action :find_user, except: [:index]
 
