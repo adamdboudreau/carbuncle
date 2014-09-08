@@ -8,7 +8,7 @@
         %li= msg
 
 .elem.generic_form
-  = form_for @product, as: :product, url: '/products' do |f|
+  = form_for @product, as: :product, url: "/products/#{@product.id}" do |f|
     .elem
       .labels
         = f.label :name
