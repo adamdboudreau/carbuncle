@@ -1,6 +1,12 @@
 require 'spec_helper'
 
 describe Product do
+  it { should validate_presence_of :name }
+  it { should validate_presence_of :description }
+  it { should_not allow_value(-1).for(:cost) }
+  it { should_not allow_value(0).for(:cost) }
+  it { should allow_value(1).for(:cost) }
+
   let(:product) { FactoryGirl.create(:product) }
 
   describe "#valid?" do
