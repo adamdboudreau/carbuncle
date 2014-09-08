@@ -22,6 +22,50 @@ describe User do
     end
   end
 
+  describe ".ordered_by" do
+    let(:users) do
+      u1 = u2 = nil
+
+      Timecop.freeze(2008, 7, 1, 12, 0, 0) do
+        u1 = FactoryGirl.create(:user)
+      end
+
+      Timecop.freeze(2008, 7, 1, 12, 30, 0) do
+        u2 = FactoryGirl.create(:user)
+      end
+      u3 = FactoryGirl.create(:user)
+      
+      [u1, u2, u3]
+    end
+
+    context "email" do
+      it "should sort by user emails" do
+        User.ordered_by(:email, :asc).should == users
+      end
+      # it "should sort by user emails desc" do
+      #   User.ordered_by(:email, :desc).should == users.reverse
+      # end
+    end
+
+    context "created" do
+      it "should sort by created time" do
+        User.ordered_by(:created, :asc).should == users
+      end
+      # it "should sort by created time desc" do
+      #   User.ordered_by(:created, :desc).should == users.reverse
+      # end
+    end
+    
+    context "updated" do
+      it "should sort by updated time" do
+        User.ordered_by(:updated, :asc).should == users
+      end
+      # it "should sort by updated time desc" do
+      #   User.ordered_by(:updated, :desc).should == users.reverse
+      # end
+    end
+  end
+
   # Commenting out the tests that are already covered by devise tests
   # it { should validate_presence_of :email }
   # %w{invalid_email_format 123 $$$ () ☃ bla@bla.}.each do |email|
