@@ -30,7 +30,7 @@ describe Product do
     end
 
     context "name" do
-      it "should sort by product names" do
+      it "should sort by product name" do
         Product.ordered_by(:name, :asc).should == alpha_name_products
       end
     end
@@ -41,12 +41,24 @@ describe Product do
         FactoryGirl.create(:product, name: 'Website Developer', description: 'Ruby on Rails w/ JQuery')]
     end
 
-    context "name" do
-      it "should sort by product names" do
-        Product.ordered_by(:name, :asc).should == alpha_description_products
+    context "description" do
+      it "should sort by product description" do
+        Product.ordered_by(:description, :asc).should == alpha_description_products
       end
     end
-    
+
+    let(:cost_products) do
+      [FactoryGirl.create(:product, cost: 1), 
+        FactoryGirl.create(:product, cost: 2), 
+        FactoryGirl.create(:product, cost: 42)]
+    end
+
+    context "cost" do
+      it "should sort by product cost" do
+        Product.ordered_by(:cost, :asc).should == cost_products
+      end
+    end
+
     let(:products) do
       u1 = u2 = nil
 
