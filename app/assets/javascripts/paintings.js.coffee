@@ -13,4 +13,7 @@ jQuery ->
     progress: (e, data) ->
       if data.context
         progress = parseInt(data.loaded / data.total * 100, 10)
-        data.context.find('.bar').css('width', progress + '%')
+        progress_bar = data.context.find('.bar')
+        progress_bar.css('width', progress + '%')
+        progress_bar.css('backgroundColor', 'blue')
+        progress_bar.css('height', '20')

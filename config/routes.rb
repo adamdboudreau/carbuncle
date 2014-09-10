@@ -1,6 +1,7 @@
 Carbuncle::Application.routes.draw do
   resources :products
   get 'fader' => 'paintings#fader'
+  delete 'image_batch_destroy' => 'paintings#batch_destroy'
   get 'knockout_test' => 'products#knockout_test'
 
   resources :paintings

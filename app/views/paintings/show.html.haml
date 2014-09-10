@@ -1,0 +1,17 @@
+.elem.small_margin.btn-group
+  = link_to 'Edit', edit_painting_path(@painting), { class: 'btn btn-default' }
+  = link_to 'Back', paintings_path, { class: 'btn btn-default' }
+
+.elem
+  .label
+    Title: 
+    = @painting.title
+.elem
+  .label
+    - unless @painting.caption.blank?
+      Caption: 
+      = @painting.caption
+    - unless @painting.ordinal.blank?
+      , Ordinal: 
+      = @painting.ordinal
+.elem= image_tag @painting.image, width: '100%'

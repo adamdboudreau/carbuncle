@@ -1,10 +1,11 @@
 class PaintingsController < ApplicationController
-  before_action :set_painting, only: [:show, :edit, :update, :destroy]
+  before_action :find_painting, except: [:index, :batch_destroy, :fader]
 
   before_action :setup_sorting_variables, only: [:index]
 
   def fader
-    @p = Painting.ordered_by(:created, :asc) #.where(id: [358, 359, 360])
+    @p = Painting.where{ ordinal != nil }.
+      ordered_by(:ordinal, :asc)
     @links = []
     @p.each do |p|
       @links << p.image.to_s
@@ -21,53 +22,77 @@ class PaintingsController < ApplicationController
   end
 
   def new
-    @painting = Painting.new
+    setup_form
   end
 
   def edit
+    setup_form
   end
 
   def create
-    @painting = Painting.new(painting_params)
-
-    respond_to do |format|
-      if @painting.save
-        format.html { redirect_to @painting, notice: 'Painting was successfully created.' }
-        format.json { render action: 'show', status: :created, location: @painting }
-      else
-        format.html { render action: 'new' }
-        format.json { render json: @painting.errors, status: :unprocessable_entity }
-      end
-    end
+    save_form
   end
 
   def update
-    respond_to do |format|
-      if @painting.update(painting_params)
-        format.html { redirect_to @painting, notice: 'Painting was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: 'edit' }
-        format.json { render json: @painting.errors, status: :unprocessable_entity }
-      end
-    end
+    save_form
   end
 
   def destroy
-    @painting.destroy
+    if @painting.nil?
+      flash[:error] = "Can't find painting" 
+    elsif @painting.new_record?
+      flash[:error] = "Can't destroy new painting" 
+    else
+      flash[:notice] = "You destroyed #{@painting.image}"
+      @painting.destroy
+    end
+
     respond_to do |format|
       format.html { redirect_to paintings_url }
       format.json { head :no_content }
     end
   end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_painting
-      @painting = Painting.where(id: params[:id]).first
+  def batch_destroy
+    ids = params[:painting_ids] || []
+    if ids.length > 0
+      paintings = Painting.where{ id >> ids }
+      images = paintings.map(&:image).join(", ")
+      paintings.destroy_all
+      flash[:notice] = "Successfully destroyed the images: " + images
+    else
+      flash[:error] = "Select some images to destroy first"
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
+    respond_to do |format|
+      format.html { render nothing: true }
+      format.json { head :no_content }
+    end
+  end
+
+  private
+    def find_painting
+      @painting = if params[:id].blank?
+        Painting.new
+      else
+        Painting.where(id: params[:id]).first
+      end
+    end
+
+    def setup_form
+      render :form
+    end
+
+    def save_form
+      @painting.attributes = painting_params
+      if @painting.save
+        flash[:notice] = "Successfully saved #{@painting.title}"
+        redirect_to paintings_url
+      else
+        setup_form
+      end
+    end
+
     def painting_params
       params.require(:painting).permit(:image, :title, :caption, :ordinal, :remote_image_url)
     end

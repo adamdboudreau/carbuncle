@@ -1,6 +1,6 @@
 - @paintings.each do |p|
   %tr
-    %td= image_tag p.image, size: '150x150'
+    %td= image_tag p.image, size: '50x50'
     %td= p.title
     %td= p.caption
     %td= p.ordinal
@@ -8,4 +8,7 @@
     %td= p.updated_at.strftime('%D')
     %td= link_to "Show", p
     %td= link_to 'Edit', edit_painting_path(p)
-    %td= link_to 'Destroy', p, method: :delete, data: { confirm: "Are you sure?" }
+    %td
+      = check_box_tag("destroy_paintings[]", p.id, false, {"data-bind" => "checked: paintings"})
+      &nbsp;
+      = link_to 'Destroy', p, method: :delete, data: { confirm: "Are you sure?" }
