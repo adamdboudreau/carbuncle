@@ -1,13 +1,48 @@
-%hi Hello
+#outy{ style: "width: 1080px; height: 720px;" }
+  #inny{ style: "width: 1080px; height: 720px;" }
+    = image_tag @links.first, width: '1080px', height: '720px', id: 'banner'
 
-= #render partial: 'broken_fader'
+:javascript
+  var Fader = function () {
+    this.imageList = #{@links.inspect};
+    this.dur = 5000; // fade duration
+    this.index = 0;  // current image shown
+    this.fDiv = '#inny';
+    this.banner = '#banner';
+    this.bDiv = '#outy';
+    this.w = '1080px';
+    this.h = '720px';
 
-%br/
+    this.nextIndex = function() {
+      if (this.index < (this.imageList.length - 1)) {
+        this.index ++;
+      } else {
+        this.index = 0;
+      }
+    }.bind(this);
+
+    this.look = function () {
+      console.log('look');
+      console.log(this.index);
+      this.nextIndex();
+      console.log(this.index);
 
 
-%br/
+    }.bind(this);
 
+    this.start = function () {
+      this.nextIndex();
+      var currentImage = this.imageList[this.index];
 
-%br/
+      $(this.bDiv).css("background-image","url('" + currentImage + "')");
+      $(this.bDiv).css("background-size","1080px 720px");
 
-= render partial: 'jquery_timing_fader.html.haml'
+      $(this.fDiv).fadeOut(1000, function () {
+        $(this.banner).prop("src",currentImage );
+        $(this.fDiv).fadeIn(1000);
+      }.bind(this));
+    }.bind(this);
+  };
+
+  var f = new Fader();
+  setInterval(f.start, 5000);
