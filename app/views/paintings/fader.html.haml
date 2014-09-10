@@ -1,48 +1,66 @@
-#outy{ style: "width: 1080px; height: 720px;" }
-  #inny{ style: "width: 1080px; height: 720px;" }
-    = image_tag @links.first, width: '1080px', height: '720px', id: 'banner'
+#outy
+  #inny
+    = image_tag @links.first, id: 'banner'
 
 :javascript
-  var Fader = function () {
-    this.imageList = #{@links.inspect};
-    this.dur = 5000; // fade duration
-    this.index = 0;  // current image shown
-    this.fDiv = '#inny';
-    this.banner = '#banner';
-    this.bDiv = '#outy';
-    this.w = '1080px';
-    this.h = '720px';
+  var Fader = function (options) {
+    var width = options.width || "1080px",
+      height = options.height || "720px",
+      fDiv = options.innerDiv || '',
+      bDiv = options.outerDiv || '',
+      banner = options.banner || '',
+      images = options.images || [],
+      imageListLength = images.length,
+      speed = options.speed || 1000,
+      index = 0,
+      currentImage = images[0],
+      backgroundText = '';
+
+    if (typeof width === "number") {
+      width = width.toString() + 'px';
+    }
+    if (typeof height === "number") {
+      height = height.toString() + 'px';
+    }
 
     this.nextIndex = function() {
-      if (this.index < (this.imageList.length - 1)) {
-        this.index ++;
+      if (index < (imageListLength - 1)) {
+        index ++;
       } else {
-        this.index = 0;
+        index = 0;
       }
-    }.bind(this);
-
-    this.look = function () {
-      console.log('look');
-      console.log(this.index);
-      this.nextIndex();
-      console.log(this.index);
-
-
-    }.bind(this);
+    };
+    // Initialize the width/height of the divs and img
+    $(bDiv).css('width', width);
+    $(bDiv).css('height', height);
+    $(fDiv).css('width', width);
+    $(fDiv).css('height', height);
+    $(banner).width(width);
+    $(banner).height(height);
 
     this.start = function () {
       this.nextIndex();
-      var currentImage = this.imageList[this.index];
+      currentImage = images[index];
+      $(bDiv).css({
+          "background-image" : "url('" + currentImage + "')",
+          "background-size" : width + ' ' + height,
+          "background-repeat" : 'no-repeat'
+        });
 
-      $(this.bDiv).css("background-image","url('" + currentImage + "')");
-      $(this.bDiv).css("background-size","1080px 720px");
-
-      $(this.fDiv).fadeOut(1000, function () {
-        $(this.banner).prop("src",currentImage );
-        $(this.fDiv).fadeIn(1000);
-      }.bind(this));
+      $(fDiv).fadeOut(speed, function () {
+        $(banner).prop("src",currentImage);
+        $(banner).width(width);
+        $(banner).height(height);
+        $(fDiv).fadeIn(speed);
+      });
     }.bind(this);
   };
 
-  var f = new Fader();
+  var faderOptions = {
+      images: #{@links.inspect},
+      outerDiv: "#outy",
+      innerDiv: "#inny",
+      banner: "#banner"
+    },
+    f = new Fader(faderOptions);
   setInterval(f.start, 5000);
