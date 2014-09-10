@@ -4,7 +4,8 @@ class PaintingsController < ApplicationController
   before_action :setup_sorting_variables, only: [:index]
 
   def fader
-    @p = Painting.ordered_by(:created, :asc) #.where(id: [358, 359, 360])
+    @p = Painting.where{ ordinal != nil }.
+      ordered_by(:ordinal, :asc)
     @links = []
     @p.each do |p|
       @links << p.image.to_s
@@ -12,6 +13,7 @@ class PaintingsController < ApplicationController
   end
   
   def index
+    p flash.inspect
     sort_key = [:image, :title, :caption, :ordinal, :created, :updated][@sort]
     direction = (@asc == 1) ? :asc : :desc
     @paintings = Painting.ordered_by(sort_key, direction).page(@page).per_page(10)
@@ -57,6 +59,36 @@ class PaintingsController < ApplicationController
     @painting.destroy
     respond_to do |format|
       format.html { redirect_to paintings_url }
+      format.json { head :no_content }
+    end
+  end
+
+  def batch_destroy
+    # raise @response.inspect
+    # raise params.inspect
+    # p "ggg"
+    # p response.inspect
+    # p "gg"
+    # p "asdf"
+    # logger.info response.inspect
+    # logger.info "some response"
+    ids = params[:painting_ids] || []
+    if ids.length > 0
+      paintings = Painting.where{ id >> ids }
+      images = paintings.map(&:image).join(", ")
+      paintings.destroy_all
+      flash[:notice] = "Successfully destroyed the images: " + images
+    else
+      flash[:error] = "Select some images to destroy first"
+    end
+
+    # setup_sorting_variables
+    # index
+    # redirect_to paintings_url
+    respond_to do |format|
+      #format.html { render :index }
+      format.html { render nothing: true }
+      # format.html { redirect_to paintings_url }
       format.json { head :no_content }
     end
   end

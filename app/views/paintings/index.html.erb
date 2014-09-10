@@ -1,18 +1,5 @@
 <h1>Listing paintings</h1>
 
-<div id="paintings">
-  <% unless @paintings.empty? %>
-    <!-- 
-    <% Painting.all.each do |p| %>
-      <%= image_tag p.image, style: 'width: 200px; border: 0px; margin: 0px; padding: 0px;' %>
-    <% end %>
-    -->
-    <%= render partial: 'list' %>
-  <% end %>
-</div>
-
-<div class="clear"></div>
-
 <%= link_to 'New Painting', new_painting_path %>
 
 <br/>
@@ -21,8 +8,6 @@
   <%= f.file_field :image, multiple: true, name: "painting[image]" %>
 <% end %>
 
-
-
 <script id="template-upload" type="text/x-tmpl">
 <div class="upload">
   {%=o.name%}
@@ -30,3 +15,37 @@
 </div>
 </script>
 
+<div id="paintings">
+  <% unless @paintings.empty? %>
+    <div class="pull-right">
+      <button data-bind="click: batchDestroy"> Destroy selected paintings </button>
+    </div>
+    <%= render partial: 'list' %>
+
+    <div class="pull-right">
+      <button data-bind="click: batchDestroy"> Destroy selected paintings </button>
+    </div>
+  <% end %>
+</div>
+
+<script>
+  var viewModel = { paintings: ko.observableArray([]) };
+
+  viewModel.batchDestroy = function (vm, e) {
+      $.ajax({
+        url: "/image_batch_destroy",
+        type: "delete",
+        data: ko.toJSON({ painting_ids: vm.paintings }),
+        contentType: "application/json",
+        success: function (result) 
+        {
+          location.reload();
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+          alert(jqXHR.responseText);
+        }
+      });
+    };
+
+  ko.applyBindings(viewModel);
+</script>
