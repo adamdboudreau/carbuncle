@@ -13,7 +13,6 @@ class PaintingsController < ApplicationController
   end
   
   def index
-    p flash.inspect
     sort_key = [:image, :title, :caption, :ordinal, :created, :updated][@sort]
     direction = (@asc == 1) ? :asc : :desc
     @paintings = Painting.ordered_by(sort_key, direction).page(@page).per_page(10)
@@ -64,14 +63,6 @@ class PaintingsController < ApplicationController
   end
 
   def batch_destroy
-    # raise @response.inspect
-    # raise params.inspect
-    # p "ggg"
-    # p response.inspect
-    # p "gg"
-    # p "asdf"
-    # logger.info response.inspect
-    # logger.info "some response"
     ids = params[:painting_ids] || []
     if ids.length > 0
       paintings = Painting.where{ id >> ids }
@@ -82,13 +73,8 @@ class PaintingsController < ApplicationController
       flash[:error] = "Select some images to destroy first"
     end
 
-    # setup_sorting_variables
-    # index
-    # redirect_to paintings_url
     respond_to do |format|
-      #format.html { render :index }
       format.html { render nothing: true }
-      # format.html { redirect_to paintings_url }
       format.json { head :no_content }
     end
   end
