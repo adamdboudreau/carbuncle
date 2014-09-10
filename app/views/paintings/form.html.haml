@@ -1,0 +1,36 @@
+%h1= (@painting.new_record?) ? 'Create Painting' : 'Edit Painting'
+
+- if @painting.errors.any?
+  #error_explanation
+    %h2= pluralize(@painting.errors.count, t(:error)).html_safe + t(:_prohibited_this_painting_from_being_saved)
+    %ul
+      - @painting.errors.full_messages.each do |msg|
+        %li= msg
+
+.elem.generic_form
+  = form_for @painting, as: :painting, url: "/paintings/#{@painting.id}" do |f|
+    .elem
+      .labels
+        = f.label :image
+      = f.file_field :image
+      .labels
+        = f.label :remote_image_url, "or image URL"
+      = f.text_field :remote_image_url
+      .labels
+        = f.label :title
+      = f.text_field :title
+      .labels
+        = f.label :caption
+      = f.text_field :caption
+      .labels
+        = f.label :ordinal
+      = f.number_field :ordinal
+    
+    .btn-group.submit_field
+      - if @painting.new_record?
+        = f.submit 'Create', class: 'btn btn-success'
+      - else
+        = f.submit 'Update', class: 'btn btn-success'
+        = link_to 'Show', @painting, { class: 'btn btn-default' }
+
+      = link_to 'Back', paintings_path, { class: 'btn btn-default' }

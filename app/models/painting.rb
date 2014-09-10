@@ -1,5 +1,7 @@
 class Painting < ActiveRecord::Base
-  
+  validates :title, presence: true
+  validates :ordinal, numericality: { greater_than: 0 }, allow_blank: true
+
   mount_uploader :image, ImageUploader
 
   before_create :default_title
