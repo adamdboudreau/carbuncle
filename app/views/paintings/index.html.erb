@@ -18,18 +18,33 @@
 <div id="paintings">
   <% unless @paintings.empty? %>
     <div class="pull-right">
+      <button data-bind="click: selectAllOnPage"> Select all </button>
+      <button data-bind="click: clearSelection"> Clear selection </button>
       <button data-bind="click: batchDestroy"> Destroy selected paintings </button>
     </div>
     <%= render partial: 'list' %>
 
     <div class="pull-right">
+      <button data-bind="click: selectAllOnPage"> Select all </button>
+      <button data-bind="click: clearSelection"> Clear selection </button>
       <button data-bind="click: batchDestroy"> Destroy selected paintings </button>
     </div>
   <% end %>
 </div>
 
 <script>
-  var viewModel = { paintings: ko.observableArray([]) };
+  var viewModel = { paintings: ko.observableArray([]),
+    selectAllOnPage: function (vm, e) {
+      $("input:checkbox[name='destroy_paintings[]']:not(:checked)").each(function() {
+        $(this).click();
+      });
+    },
+    clearSelection: function (vm, e) {
+      $("input:checkbox[name='destroy_paintings[]']:checked").each(function() {
+        $(this).click();
+      });
+    }
+   };
 
   viewModel.batchDestroy = function (vm, e) {
       $.ajax({
