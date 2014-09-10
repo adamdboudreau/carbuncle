@@ -1,13 +1,15 @@
-%hi Hello
+= javascript_include_tag "fader.js"
 
-= #render partial: 'broken_fader'
+#outy
+  #inny
+    = image_tag @links.first, id: 'banner'
 
-%br/
-
-
-%br/
-
-
-%br/
-
-= render partial: 'jquery_timing_fader.html.haml'
+:javascript
+  var faderOptions = {
+      images: #{@links.inspect},
+      outerDiv: "#outy",
+      innerDiv: "#inny",
+      banner: "#banner"
+    },
+    f = new Fader(faderOptions);
+  setInterval(f.start, 2000);
