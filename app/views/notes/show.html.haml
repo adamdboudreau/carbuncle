@@ -1,0 +1,13 @@
+.elem.small_margin.btn-group
+  = link_to 'Edit', edit_note_path(@note), { class: 'btn btn-default' }
+  = link_to 'Back', notes_path, { class: 'btn btn-default' }
+
+.elem
+  .label
+    Title: 
+    = @note.value
+.elem
+  .label
+    - unless @note.user.nil?
+      User: 
+      = @note.user.email

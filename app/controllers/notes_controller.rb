@@ -1,74 +1,81 @@
 class NotesController < ApplicationController
-  before_action :set_note, only: [:show, :edit, :update, :destroy]
-
-  # GET /notes
-  # GET /notes.json
+  before_action :setup_sorting_variables, only: [:index]
+  before_action :find_note, except: [:index]
+  
   def index
-    @notes = Note.all
+    sort_key = [:value, :email, :created, :updated][@sort]
+    direction = (@asc == 1) ? :asc : :desc
+    
+    @notes = Note.similar_notes(params[:search]).
+      ordered_by(sort_key, direction).page(@page).per_page(10)
   end
 
-  # GET /notes/1
-  # GET /notes/1.json
   def show
   end
 
-  # GET /notes/new
   def new
-    @note = Note.new
+    setup_form
   end
 
-  # GET /notes/1/edit
   def edit
+    setup_form
   end
 
-  # POST /notes
-  # POST /notes.json
   def create
-    @note = Note.new(note_params)
-
-    respond_to do |format|
-      if @note.save
-        format.html { redirect_to @note, notice: 'Note was successfully created.' }
-        format.json { render action: 'show', status: :created, location: @note }
-      else
-        format.html { render action: 'new' }
-        format.json { render json: @note.errors, status: :unprocessable_entity }
-      end
-    end
+    save_form
   end
 
-  # PATCH/PUT /notes/1
-  # PATCH/PUT /notes/1.json
   def update
-    respond_to do |format|
-      if @note.update(note_params)
-        format.html { redirect_to @note, notice: 'Note was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: 'edit' }
-        format.json { render json: @note.errors, status: :unprocessable_entity }
-      end
-    end
+    save_form
   end
 
-  # DELETE /notes/1
-  # DELETE /notes/1.json
   def destroy
-    @note.destroy
-    respond_to do |format|
-      format.html { redirect_to notes_url }
-      format.json { head :no_content }
+    if @note.nil?
+      flash[:error] = "Can't find note" 
+    elsif @note.new_record?
+      flash[:error] = "Can't destroy new note" 
+    else
+      flash[:notice] = "You destroyed #{@note.value}"
+      @note.destroy
     end
+
+    redirect_to notes_path
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_note
-      @note = Note.find(params[:id])
+    def find_note
+      @note = if params[:id].blank?
+        Note.new
+      else
+        Note.where(id: params[:id]).first
+      end
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
+    def setup_form
+      render :form
+    end
+
+    def save_form
+      @note.attributes = note_params
+      if @note.save
+        flash[:notice] = "Successfully saved #{@note.value}"
+        redirect_to notes_url
+      else
+        setup_form
+      end
+    end
+
     def note_params
-      params.require(:note).permit(:value, :user_id)
+      params.require(:note).permit(:value, :user)
+    end
+
+    def view_content
+      render params[:action]
+    end
+
+    def setup_sorting_variables
+      @sort = params[:sort].blank? ? 0 : params[:sort].to_i
+      @asc = params[:asc].blank? ? 0 : params[:asc].to_i
+      @page = params[:page].blank? ? 1 : params[:page].to_i
     end
 end

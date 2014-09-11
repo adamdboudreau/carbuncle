@@ -1,0 +1,24 @@
+%h1= (@note.new_record?) ? 'Create note' : 'Edit note'
+
+- if @note.errors.any?
+  #error_explanation
+    %h2= pluralize(@note.errors.count, t(:error)).html_safe + t(:_prohibited_this_note_from_being_saved)
+    %ul
+      - @note.errors.full_messages.each do |msg|
+        %li= msg
+
+.elem.generic_form
+  = form_for @note, as: :note, url: "/notes/#{@note.id}" do |f|
+    .elem
+      .labels
+        = f.label :value
+      = f.text_field :value
+    
+    .btn-group.submit_field
+      - if @note.new_record?
+        = f.submit 'Create', class: 'btn btn-success'
+      - else
+        = f.submit 'Update', class: 'btn btn-success'
+        = link_to 'Show', @note, { class: 'btn btn-default' }
+
+      = link_to 'Back', notes_path, { class: 'btn btn-default' }

@@ -1,0 +1,43 @@
+%h1 Listing Notes
+
+%br/
+
+.elem
+	= form_tag notes_path, method: :get, id: "note_search" do
+		= text_field_tag :search, params[:search], placeholder: "Search notes"
+		= submit_tag "Search", name: nil
+
+- unless @notes.empty?
+	.elem{ id: 'notes_table' }
+		= render partial: 'list'
+- else
+	.elem
+		- if params[:search].blank?
+			No notes exist
+		- else
+			No notes match your search criteria
+
+
+%br/
+%br/
+
+.white_link.small_margin
+	= link_to "New note", new_note_path, class: 'btn btn-default'
+
+
+:javascript
+	// Add click event to each of the headers of the notes table, and pagination
+	$(function () {
+		$('#notes_table th a, #notes_table .pagination a').on('click', &crarr; 
+			function () {
+				$.getScript(this.href);
+				return false;
+			}
+		);
+		
+		// Search form.
+		$('#note_search').submit(function () {
+			$.get(this.action, $(this).serialize(), null, 'script');
+			return false;
+		});
+	});
