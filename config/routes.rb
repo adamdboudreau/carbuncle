@@ -1,4 +1,6 @@
 Carbuncle::Application.routes.draw do
+  resources :notes
+
   resources :products
   get 'fader' => 'paintings#fader'
   delete 'image_batch_destroy' => 'paintings#batch_destroy'
