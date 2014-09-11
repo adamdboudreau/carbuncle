@@ -1,0 +1,6 @@
+- unless @users.empty?
+  .elem
+    Select from similar users with similar emails
+  - @users.each do |u|
+    .selection{ id: u.id }
+      = u.email

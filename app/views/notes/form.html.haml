@@ -12,8 +12,16 @@
     .elem
       .labels
         = f.label :value
-      = f.text_field :value
-    
+      = f.text_field :value, class: "form-control"
+
+    = f.hidden_field :user_id
+
+    .elem
+      .labels
+        = label_tag :user_email
+      = text_field_tag :user_email, f.object.user.nil? ? "" : f.object.user.email, "data-bind" => "value: email, valueUpdate: 'afterkeydown'", class: "form-control"
+      .results.well
+
     .btn-group.submit_field
       - if @note.new_record?
         = f.submit 'Create', class: 'btn btn-success'
@@ -22,3 +30,45 @@
         = link_to 'Show', @note, { class: 'btn btn-default' }
 
       = link_to 'Back', notes_path, { class: 'btn btn-default' }
+
+:javascript
+  $('.results').hide();
+
+  var initial_user = $('#user_email').val(),
+    viewModel = { email: ko.observable(initial_user || '') };
+
+  viewModel.email.subscribe(function (partial) {
+    if (partial === '') {
+      $('#note_user_id').val('');
+    } else {
+      var posting = {partial_email: ko.unwrap(partial)};
+      $.ajax({
+        url: '#{search_users_path}',
+        method: 'post',
+        data: posting,
+        success: function (results) {
+          $('.results').html(results);
+          
+          if (results.match(/selection/) === null) {
+            $('.results').show();
+            $('#note_user_id').val('');
+            $('.results').
+              html("User email doesn't match records. Updating will clear this note's user");
+          } else {
+            $('.results').show();
+
+            $('.selection').on('click', function (e) {
+              $('#note_user_id').val(e.currentTarget.id);
+              $('#user_email').val(e.currentTarget.innerText);
+              $('.results').hide();
+            });
+          }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+          alert(jqXHR.responseText);
+        }
+      });
+    }
+  });
+
+  ko.applyBindings(viewModel);

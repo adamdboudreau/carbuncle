@@ -10,6 +10,13 @@ class NotesController < ApplicationController
       ordered_by(sort_key, direction).page(@page).per_page(10)
   end
 
+  def search_users
+    @users = User.similar_emails(params[:partial_email]).
+      ordered_by(:email, :asc).limit(10)
+
+    render partial: "/layouts/user_list"
+  end
+
   def show
   end
 
@@ -66,7 +73,7 @@ class NotesController < ApplicationController
     end
 
     def note_params
-      params.require(:note).permit(:value, :user)
+      params.require(:note).permit(:value, :user_id)
     end
 
     def view_content

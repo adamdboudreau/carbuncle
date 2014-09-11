@@ -1,5 +1,6 @@
 Carbuncle::Application.routes.draw do
   resources :notes
+  post 'search_users' => 'notes#search_users'
 
   resources :products
   get 'fader' => 'paintings#fader'
