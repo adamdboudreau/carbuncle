@@ -3,7 +3,7 @@ class ProductsController < ApplicationController
   before_action :find_product, except: [:index]
   
   def index
-    sort_key = [:name, :descritpion, :cost, :created, :updated][@sort]
+    sort_key = [:name, :description, :cost, :created, :updated][@sort]
     direction = (@asc == 1) ? :asc : :desc
     
     @products = Product.similar_names(params[:search]).
