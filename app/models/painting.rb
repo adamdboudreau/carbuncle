@@ -4,7 +4,7 @@ class Painting < ActiveRecord::Base
 
   mount_uploader :image, ImageUploader
 
-  before_create :default_title
+  before_validation :default_title
   
   def default_title
     self.title ||= File.basename(image.filename, '.*').titleize if image
