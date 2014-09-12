@@ -4,10 +4,10 @@
 
 .elem
   .label
-    Title: 
+    Note: 
     = @note.value
-.elem
-  .label
-    - unless @note.user.nil?
+- unless @note.user.nil?
+  .elem
+    .label
       User: 
       = @note.user.email

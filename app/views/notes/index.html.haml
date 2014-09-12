@@ -23,14 +23,3 @@
 
 .white_link.small_margin
 	= link_to "New note", new_note_path, class: 'btn btn-default'
-
-
-:javascript
-	// Add click event to each of the headers of the notes table, and pagination
-	$(function () {
-		// Search form.
-		$('#note_search').submit(function () {
-			$.get(this.action, $(this).serialize(), null, 'script');
-			return false;
-		});
-	});
