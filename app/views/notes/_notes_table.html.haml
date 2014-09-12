@@ -2,12 +2,7 @@
   - present note do |n|
     %tr
       %td= n.value
-      %td
-        - if n.user.nil?
-          No User
-        - else
-          = n.user.email
-          
+      %td= n.creator || "No user"
       %td= n.created_at.strftime('%D')
       %td= n.updated_at.strftime('%D')
       %td= link_to "Show", n.note
