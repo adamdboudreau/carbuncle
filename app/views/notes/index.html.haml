@@ -28,13 +28,6 @@
 :javascript
 	// Add click event to each of the headers of the notes table, and pagination
 	$(function () {
-		$('#notes_table th a, #notes_table .pagination a').on('click', &crarr; 
-			function () {
-				$.getScript(this.href);
-				return false;
-			}
-		);
-		
 		// Search form.
 		$('#note_search').submit(function () {
 			$.get(this.action, $(this).serialize(), null, 'script');
