@@ -71,4 +71,17 @@
     }
   });
 
+  //Before form submits check if the user id can be updated
+  $('#edit_note').submit(function () {
+    if ($('.selection:visible').length > 0) {
+      var current_partial_email = $('#user_email').val();
+      
+      $('.selection').each(function (i, selection) { 
+        if (selection.innerText === current_partial_email) {
+          $('#note_user_id').val(selection.id);
+        }
+      });
+    }
+  });
+
   ko.applyBindings(viewModel);
