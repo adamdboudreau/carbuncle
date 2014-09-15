@@ -43,7 +43,7 @@ class Administration::ManageUsersController < ApplicationController
       @user.destroy
     end
 
-    redirect_to administration_users_path
+    redirect_to administration_manage_users_path
   end
 
 private
@@ -63,7 +63,7 @@ private
     @user.attributes = user_params
     if @user.save
       flash[:notice] = "Successfully saved #{@user.email}"
-      redirect_to administration_users_url
+      redirect_to administration_manage_users_url
     else
       setup_form
     end
