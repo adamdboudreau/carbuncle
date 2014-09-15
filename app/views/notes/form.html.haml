@@ -58,8 +58,9 @@
             $('.results').show();
 
             $('.selection').on('click', function (e) {
-              $('#note_user_id').val(e.currentTarget.id);
-              $('#user_email').val(e.currentTarget.innerText);
+              var selection_id = e.currentTarget.id
+              $('#note_user_id').val(selection_id);
+              $('#user_email').val($('#' + selection_id).text());
               $('.results').hide();
             });
           }
