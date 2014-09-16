@@ -57,8 +57,8 @@ describe Note do
     end
     
     context "email" do
-      let(:u1) { FactoryGirl.create(:user) }
-      let(:u2) { FactoryGirl.create(:user) }
+      let(:u1) { FactoryGirl.create(:user, email: 'acdc@test.com') }
+      let(:u2) { FactoryGirl.create(:user, email: 'zztop@test.com') }
       before do
         u1.notes << notes[1]
         u2.notes << notes[2]

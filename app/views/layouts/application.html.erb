@@ -12,14 +12,15 @@
   <div class="row">
 
     <div class="col-md-8">
-      <%= link_to "Dashboard", root_path, {class: 'btn btn-primary'} %>
-      <%= link_to "Users", administration_manage_users_path, {class: 'btn btn-primary'} %>
-      <%= link_to "Notes", notes_path, {class: 'btn btn-primary'} %>
-      <%= link_to "Images", paintings_path, {class: 'btn btn-primary'} %>
-      <%= link_to "Image Fader", fader_path, {class: 'btn btn-primary'} %>
-      <%= link_to "Products", products_path, {class: 'btn btn-primary'} %>
-      <%= link_to "Knockout test", knockout_test_path, {class: 'btn btn-primary'} %>
-
+      <nav>
+        <%= link_to "Dashboard", root_path, {class: 'btn btn-primary'} %>
+        <%= link_to "Users", administration_manage_users_path, {class: 'btn btn-primary'} %>
+        <%= link_to "Notes", notes_path, {class: 'btn btn-primary'} %>
+        <%= link_to "Images", paintings_path, {class: 'btn btn-primary'} %>
+        <%= link_to "Image Fader", fader_path, {class: 'btn btn-primary'} %>
+        <%= link_to "Products", products_path, {class: 'btn btn-primary'} %>
+        <%= link_to "Knockout test", knockout_test_path, {class: 'btn btn-primary'} %>
+      </nav>
     </div>
     <div class="col-md-4">
       <% if user_signed_in? %>
