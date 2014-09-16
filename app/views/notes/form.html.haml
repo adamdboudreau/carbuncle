@@ -14,13 +14,20 @@
         = f.label :value
       = f.text_field :value, class: "form-control"
 
-    = f.hidden_field :user_id
+    = f.hidden_field :user_id, "data-bind" => "value: userId"
 
     .elem
       .labels
         = label_tag :user_email
       = text_field_tag :user_email, f.object.user.nil? ? "" : f.object.user.email, "data-bind" => "value: email, valueUpdate: 'afterkeydown'", class: "form-control"
-      .results.well
+
+      .results.well{ "data-bind" => "visible: showUserResults" }
+        %h5
+          Please select from the list below (If the user is not found, then no user will be set)
+        %span{ "data-bind" => "template: { name: 'users', foreach: emailList }" }
+
+      %script{ "id" => "users", "type" => "text/html" }
+        .clickable{ "data-bind" => "text: email, click: $parent.selectUser" }
 
     .btn-group.submit_field
       - if @note.new_record?
@@ -32,38 +39,31 @@
       = link_to 'Back', notes_path, { class: 'btn btn-default' }
 
 :javascript
-  $('.results').hide();
 
   var initial_user = $('#user_email').val(),
-    viewModel = { email: ko.observable(initial_user || '') };
+    initial_user_id = $('#note_user_id').val(),
+    viewModel = { email: ko.observable(initial_user || ''),
+      userId: ko.observable(initial_user_id || ''),
+      showUserResults: ko.observable(false),
+      emailList: ko.observableArray() };
 
   viewModel.email.subscribe(function (partial) {
     if (partial === '') {
-      $('#note_user_id').val('');
+      viewModel.userId('');
     } else {
       var posting = {partial_email: ko.unwrap(partial)};
       $.ajax({
         url: '#{search_users_path}',
+        dataType: 'json',
         method: 'post',
         data: posting,
         success: function (results) {
-          $('.results').html(results);
-          
-          if (results.match(/selection/) === null) {
-            $('.results').show();
-            $('#note_user_id').val('');
-            $('.results').
-              html("User email doesn't match records. Updating will clear this note's user");
+          if (results.length === 1 && results[0].email === partial) {
+            viewModel.showUserResults(false);
           } else {
-            $('.results').show();
-
-            $('.selection').on('click', function (e) {
-              var selection_id = e.currentTarget.id
-              $('#note_user_id').val(selection_id);
-              $('#user_email').val($('#' + selection_id).text());
-              $('.results').hide();
-            });
+            viewModel.showUserResults(true);
           }
+          viewModel.emailList(results);
         },
         error: function (jqXHR, textStatus, errorThrown) {
           alert(jqXHR.responseText);
@@ -72,17 +72,9 @@
     }
   });
 
-  //Before form submits check if the user id can be updated
-  $('#edit_note').submit(function () {
-    if ($('.selection:visible').length > 0) {
-      var current_partial_email = $('#user_email').val();
-      
-      $('.selection').each(function (i, selection) { 
-        if (selection.innerText === current_partial_email) {
-          $('#note_user_id').val(selection.id);
-        }
-      });
-    }
-  });
+  viewModel.selectUser = function (data) {
+    viewModel.email(data.email);
+    viewModel.userId(data.id);
+  };
 
   ko.applyBindings(viewModel);

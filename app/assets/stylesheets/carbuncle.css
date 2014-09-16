@@ -106,3 +106,7 @@ div div.elem:last-of-type
 .submit_field{
   padding-top: 15px; 
 }
+
+.clickable {
+  cursor: pointer;
+}

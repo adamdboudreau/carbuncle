@@ -14,7 +14,10 @@ class NotesController < ApplicationController
     @users = User.similar_emails(params[:partial_email]).
       ordered_by(:email, :asc).limit(10)
 
-    render partial: "/layouts/user_list"
+    respond_to do |format|
+      format.html { render partial: "/layouts/user_list" }
+      format.json { render :search_users }
+    end
   end
 
   def show
