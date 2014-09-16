@@ -7,7 +7,7 @@ class Painting < ActiveRecord::Base
   before_validation :default_title
   
   def default_title
-    self.title ||= File.basename(image.filename, '.*').titleize if image
+    self.title ||= File.basename(image.filename.to_s, '.*').titleize if image
   end
 
   def self.ordered_by(sort, asc)
