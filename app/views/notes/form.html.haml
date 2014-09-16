@@ -58,6 +58,7 @@
         method: 'post',
         data: posting,
         success: function (results) {
+          // If the only result is the partial, then hide results
           if (results.length === 1 && results[0].email === partial) {
             viewModel.showUserResults(false);
           } else {
@@ -74,7 +75,15 @@
 
   viewModel.selectUser = function (data) {
     viewModel.email(data.email);
-    viewModel.userId(data.id);
   };
+
+  //Before form submits check if the user id can be updated
+  $('#edit_note').submit(function () {
+    if ($('.results .clickable:hidden').length === 1) {
+      if (viewModel.emailList()[0].email === viewModel.email()) {
+        viewModel.userId(viewModel.emailList()[0].id);
+      }
+    }
+  });
 
   ko.applyBindings(viewModel);
