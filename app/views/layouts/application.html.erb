@@ -35,6 +35,12 @@
     </div>
   </div>
 
+  <% unless flash[:alert].blank? %>
+    <div class="error">
+      <%= flash[:alert] %>
+    </div>
+  <% end %>
+
   <% unless flash[:notice].blank? %>
     <div class="notice">
       <%= flash[:notice] %>
